@@ -15,10 +15,7 @@
     "incremental": true,
     "plugins": [
       {
-        "name": "next",
-        "experimental": {
-          "reactCompiler": true
-        }
+        "name": "next"
       }
     ],
     "paths": {
