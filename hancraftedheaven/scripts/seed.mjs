@@ -1,14 +1,18 @@
 import postgres from 'postgres';
 import bcrypt from 'bcryptjs';
-import 'dotenv/config'; 
+// Change 1: Import dotenv and call its config method explicitly.
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' }); // Specify .env.local if you use it
 
 // Load the database URL from your .env.local file
 const dbUrl = process.env.POSTGRES_URL;
 if (!dbUrl) {
-  throw new Error("La variable de entorno POSTGRES_URL no está definida.");
+  throw new Error("La variable de entorno POSTGRES_URL no está definida. Asegúrate de tener un archivo .env.local con la URL de tu base de datos.");
 }
 
-const sql = postgres(dbUrl, { ssl: 'require' });
+// Change 2: Increase the connection timeout to give the database time to wake up.
+// Neon can take 5-10 seconds to wake up a sleeping database.
+const sql = postgres(dbUrl, { ssl: 'require', connect_timeout: 20 });
 
 async function seedUsers() {
   console.log('Sembrando usuarios...');

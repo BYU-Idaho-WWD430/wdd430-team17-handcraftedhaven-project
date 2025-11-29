@@ -1,8 +1,12 @@
 -- Enable the extension to generate UUIDs
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- Drop the type if it exists to avoid errors on re-running the script.
+-- The CASCADE option will also drop any columns that use this type.
+DROP TYPE IF EXISTS user_role CASCADE;
+
 -- Create a custom type for user roles
-CREATE TYPE user_role AS ENUM ('user', 'seller', 'admin');
+CREATE TYPE user_role AS ENUM ('user', 'seller', 'admin'); -- Removed "IF NOT EXISTS"
 
 -- Users Table (users)
 -- Stores basic login information for all users.
@@ -19,7 +23,7 @@ CREATE TABLE IF NOT EXISTS users (
 -- Contains additional information only for users who are sellers/artisans.
 CREATE TABLE IF NOT EXISTS seller_profile (
   profile_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+  user_id UUID NOT NULL UNIQUE REFERENCES users(user_id) ON DELETE CASCADE,
   category VARCHAR(255) NOT NULL,
   description TEXT,
   image_url VARCHAR(255),
@@ -57,4 +61,3 @@ CREATE TABLE IF NOT EXISTS stories (
   content TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
-
