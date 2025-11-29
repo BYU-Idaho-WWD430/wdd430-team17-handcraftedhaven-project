@@ -1,4 +1,3 @@
-// src/app/ui/catalog/FilterSidebar.tsx
 "use client";
 
 import { useMemo, useState, useEffect } from "react";

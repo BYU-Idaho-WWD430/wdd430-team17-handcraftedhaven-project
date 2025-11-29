@@ -1,11 +1,10 @@
-// src/app/lib/actions.ts
 "use server";
 
 import postgres from "postgres";
 import { ProductWithSeller, SellerProfile, Review } from "./definitions";
 
-// Configuración de la conexión a la base de datos
-// Asegúrate de tener tu variable de entorno POSTGRES_URL configurada
+// Database connection configuration
+// Make sure you have your POSTGRES_URL environment variable set
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
 /* -------------------- SELLERS -------------------- */
@@ -86,8 +85,8 @@ export async function fetchProductStats(product_id: string) {
       FROM review
       WHERE product_id = ${product_id};
     `;
-    // La consulta devuelve un objeto con `average_rating` y `review_count`
-    // que puede ser un string. Nos aseguramos de que sean números.
+    // The query returns an object with `average_rating` and `review_count`
+    // which may be a string. We ensure they are numbers.
     const stats = data[0];
     return {
       average_rating: Number(stats.average_rating) || 0,

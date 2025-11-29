@@ -1,4 +1,3 @@
-// src/app/ui/catalog/ProductCard.tsx
 import Image from "next/image";
 import Link from "next/link";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";

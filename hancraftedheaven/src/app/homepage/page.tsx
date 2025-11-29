@@ -1,23 +1,22 @@
-// d:/Documentos/Pathway/BYU/Fall-2025 (27 oct-18 Dec)/Full Stack/Projects/wdd430-team17-handcraftedHaven-project/hancraftedheaven/src/app/homepage/page.tsx
 import Image from "next/image";
 import Link from "next/link";
 import { fetchFeaturedProducts } from "../lib/actions";
 import ProductCard from "../ui/catalog/ProductCard";
 
 export default async function Page() {
-  // Obtenemos los productos destacados desde nuestra Server Action
+  // We obtain featured products from our Server Action
   const products = (await fetchFeaturedProducts())
     .sort((a, b) => a.name.localeCompare(b.name))
     .slice(0, 4);
 
-  // ID del artesano destacado (Pedro Torres)
+  // Featured artisan ID (Pedro Torres)
   const pedroTorresId = "7baf7cfb-84b9-47ba-b554-a146daefec3e";
 
   return (
     <main>
-      {/* 🏞️ Hero Section - Modificado a 2 Columnas */}
+      {/* 🏞️ Hero Section - Modified to 2 Columns */}
       <div className="flex flex-col lg:flex-row w-full lg:h-[400px] bg-gray-100">
-        {/* Lado Izquierdo: Imagen */}
+        {/* Left Side: Image */}
         <div className="relative w-full lg:w-1/2 h-[200px] lg:h-full">
           <Image
             alt="Hero Image"
@@ -29,7 +28,7 @@ export default async function Page() {
           />
         </div>
 
-        {/* Lado Derecho: Texto de Bienvenida */}
+        {/* Right Side: Welcome Text */}
         <div className="w-full lg:w-1/2 h-full flex flex-col items-start justify-center text-black p-8 md:p-12 lg:p-16">
           <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl mb-4">
             Welcome to our <br className="hidden sm:inline" />
@@ -43,7 +42,7 @@ export default async function Page() {
             truly special begins here.
           </p>
           <Link
-            href="/catalog" // Apuntamos a la futura página de catálogo
+            href="/catalog" // We point to the future catalog page
             className="mt-6 inline-block bg-[#5b362e] text-white font-semibold px-6 py-3 rounded-md shadow-lg hover:bg-[#4a2c24] transition duration-300"
           >
             See Products Now!
@@ -51,7 +50,7 @@ export default async function Page() {
         </div>
       </div>
 
-      {/* 🛍️ Sección de Productos Destacados */}
+      {/* 🛍️ Featured Products Section */}
       <h2 className="text-center text-3xl sm:text-4xl font-semibold py-14 sm:py-20">
         Featured Products
       </h2>
@@ -67,7 +66,7 @@ export default async function Page() {
         </div>
       </div>
 
-      {/* 👨‍🎨 Sección de Historia del Artesano */}
+      {/* 👨‍🎨 Artisan Story Section */}
       <section className="mt-16 sm:mt-24 mx-auto max-w-6xl px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <div className="relative h-[320px] sm:h-[380px] lg:h-[420px] rounded-2xl overflow-hidden shadow-lg">

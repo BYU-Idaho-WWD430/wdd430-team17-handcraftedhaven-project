@@ -1,4 +1,3 @@
-// src/app/ui/catalog/RateAverage.tsx
 import { fetchProductStats } from "@/app/lib/actions";
 import { StarIcon } from "@heroicons/react/16/solid";
 
