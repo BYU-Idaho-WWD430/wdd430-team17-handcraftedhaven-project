@@ -12,11 +12,4 @@ export default defineConfig({
   migrations: {
     path: "prisma/migrations",
   },
-  // This is where connection URLs now live.
-  // We provide both singular and plural forms for compatibility with different Prisma commands.
-  datasources: {
-    db: { url: env("DATABASE_URL"), directUrl: env("DATABASE_URL_UNPOOLED") },
-  },
-  // Fallback for commands that might expect the singular form.
-  datasource: { url: env("DATABASE_URL"), directUrl: env("DATABASE_URL_UNPOOLED") },
 });
