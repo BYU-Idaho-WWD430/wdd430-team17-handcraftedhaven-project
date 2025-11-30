@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="mb-5">
         <Link href={"/"} className="flex flex-row justify-center">
           <Image
-            src={"/images/handcrafted-icon.svg"}
+            src={"/images/handcrafted-icon.png"}
             height={80}
             width={80}
             alt="Handcradted Icon"
