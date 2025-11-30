@@ -106,6 +106,9 @@ export async function fetchSellerById(seller_id: string): Promise<SellerProfile 
     ...profile,
     firstname: profile.user.firstname,
     lastname: profile.user.lastname,
+    image_url: profile.image_url ?? '/images/placeholder-avatar.png',
+    phone: profile.phone ?? '',
+    description: profile.description ?? '',
   };
 }
 
@@ -193,11 +196,18 @@ export async function fetchAllCategories(): Promise<{ category_id: string; categ
 }
 
 export async function fetchReviewsByProducts(product_id: string): Promise<Review[]> {
-  return await prisma.review.findMany({
+  const reviewsFromDb = await prisma.review.findMany({
     where: { product_id },
     include: { user: { select: { firstname: true, lastname: true, user_id: true } } },
     orderBy: { created_at: "asc" },
   });
+
+  return reviewsFromDb.map((r) => ({
+    ...r,
+    review: r.review ?? "", // Provide a default empty string if review is null
+    created_at: r.created_at ?? new Date(), // Provide a default Date if created_at is null
+    user: r.user,
+  }));
 }
 
 export async function fetchProductStats(product_id: string) {
