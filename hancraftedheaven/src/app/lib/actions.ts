@@ -90,6 +90,9 @@ export async function fetchAllSellers(): Promise<SellerProfile[]> {
     ...s,
     firstname: s.user.firstname,
     lastname: s.user.lastname,
+     image_url: s.image_url ?? '/images/placeholder-avatar.png', 
+     phone: s.phone ?? '', // Proporciona un string vacío si es null
+     description: s.description ?? '', // Proporciona un string vacío si es null
   }));
 }
 
