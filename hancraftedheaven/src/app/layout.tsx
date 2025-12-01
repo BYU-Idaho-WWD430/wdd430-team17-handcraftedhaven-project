@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./ui/styles/globals.css";
-import Footer from "./ui/Footer";
+import Footer from "./ui/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
-/* export const metadata: Metadata = {
+export const metadata: Metadata = {
   title: "Handcrafted Haven",
   description: "Your curated marketplace for authentic, artisan-made creations.",
-}; */
+}; 
 
 export default async function RootLayout({
   children,
