@@ -3,7 +3,7 @@ import Link from "next/link";
 import { fetchFeaturedProducts } from "@/app/lib/actions";
 import ProductCard from "./ui/catalog/ProductCard";
 
-export async function Page() {
+export default async function Page() {
   const featuredProducts = await fetchFeaturedProducts();
   const pedroTorresId = "7baf7cfb-84b9-47ba-b554-a146daefec3e"; // ID de ejemplo para el artesano destacado
 
