@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { fetchFeaturedProducts } from "./lib/actions";
+import { fetchFeaturedProducts } from "@/app/lib/actions";
 import ProductCard from "./ui/catalog/ProductCard";
 
 export default async function HomePage() {
