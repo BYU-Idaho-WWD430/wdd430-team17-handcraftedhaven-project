@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "Your curated marketplace for authentic, artisan-made creations.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
