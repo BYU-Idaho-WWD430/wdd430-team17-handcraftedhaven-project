@@ -5,8 +5,7 @@ import { z } from "zod";
 import { AuthError } from "next-auth";
 import bcrypt from "bcryptjs";
 import prisma from "./prisma";
-import { Prisma } from "@prisma/client";
-import { ProductWithSeller, SellerProfile, Review } from "@/app/lib/definitions";
+import { ProductWithSeller, SellerProfile, Review } from "@/app/lib/definitions"; 
 import { revalidatePath } from "next/cache";
 
 /* -------------------- REGISTRATION -------------------- */
@@ -87,13 +86,16 @@ export async function fetchAllSellers(): Promise<SellerProfile[]> {
     include: { user: { select: { firstname: true, lastname: true } } },
     orderBy: [{ user: { firstname: "asc" } }, { user: { lastname: "asc" } }],
   });
+  // Mapeamos el resultado de Prisma al tipo SellerProfile que espera la aplicación.
+  // 's' es el objeto que viene de la base de datos, que no tiene firstname/lastname en la raíz.
+  // El objeto que retornamos SÍ los tiene, cumpliendo con el tipo SellerProfile.
   return sellers.map((s) => ({
     ...s,
-    firstname: s.user.firstname,
-    lastname: s.user.lastname,
-     image_url: s.image_url ?? '/images/placeholder-avatar.png', 
-     phone: s.phone ?? '', // Proporciona un string vacío si es null
-     description: s.description ?? '', // Proporciona un string vacío si es null
+    firstname: s.user.firstname ?? '', // Proporciona un string vacío si es null
+    lastname: s.user.lastname ?? '',   // Proporciona un string vacío si es null
+    image_url: s.image_url ?? '/images/placeholder-avatar.png',
+    phone: s.phone ?? '',
+    description: s.description ?? '',
   }));
 }
 
@@ -106,7 +108,7 @@ export async function fetchSellerById(seller_id: string): Promise<SellerProfile 
   return {
     ...profile,
     firstname: profile.user.firstname,
-    lastname: profile.user.lastname,
+    lastname: profile.user.lastname ?? '', // Añadimos ?? '' por consistencia
     image_url: profile.image_url ?? '/images/placeholder-avatar.png',
     phone: profile.phone ?? '',
     description: profile.description ?? '',
