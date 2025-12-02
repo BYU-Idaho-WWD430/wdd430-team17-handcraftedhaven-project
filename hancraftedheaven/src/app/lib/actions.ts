@@ -5,8 +5,8 @@ import { z } from "zod";
 import { AuthError } from "next-auth";
 import bcrypt from "bcryptjs";
 import prisma from "./prisma";
-import { ProductWithSeller, SellerProfile, Review } from "@/app/lib/definitions";
 import { Prisma } from "@prisma/client";
+import { ProductWithSeller, SellerProfile, Review } from "@/app/lib/definitions";
 import { revalidatePath } from "next/cache";
 
 /* -------------------- REGISTRATION -------------------- */
