@@ -189,7 +189,7 @@ export async function fetchFilteredProductsPaged(searchParams: { categories?: st
   return products.map(mapProductToProductWithSeller);
 }
 
-export async function fetchAllCategories(): Promise<{ category_id: string; category_name: string }[]> {
+/* export async function fetchAllCategories(): Promise<{ category_id: string; category_name: string }[]> {
   const categories = await prisma.sellerProfile.findMany({
     select: { category: true },
     distinct: ["category"],
@@ -197,7 +197,7 @@ export async function fetchAllCategories(): Promise<{ category_id: string; categ
   });
   return categories.map((c) => ({ category_id: c.category, category_name: c.category }));
 }
-
+ */
 export async function fetchReviewsByProducts(product_id: string): Promise<Review[]> {
   const reviewsFromDb = await prisma.review.findMany({
     where: { product_id },
