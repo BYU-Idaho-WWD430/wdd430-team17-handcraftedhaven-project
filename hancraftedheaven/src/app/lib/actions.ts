@@ -198,7 +198,7 @@ export async function fetchFilteredProductsPaged(searchParams: { categories?: st
   return categories.map((c) => ({ category_id: c.category, category_name: c.category }));
 }
  */
-export async function fetchReviewsByProducts(product_id: string): Promise<Review[]> {
+/* export async function fetchReviewsByProducts(product_id: string): Promise<Review[]> {
   const reviewsFromDb = await prisma.review.findMany({
     where: { product_id },
     include: { user: { select: { firstname: true, lastname: true, user_id: true } } },
@@ -211,7 +211,7 @@ export async function fetchReviewsByProducts(product_id: string): Promise<Review
     created_at: r.created_at ?? new Date(), // Provide a default Date if created_at is null
     user: r.user,
   }));
-}
+} */
 
 export async function fetchProductStats(product_id: string) {
   try {
