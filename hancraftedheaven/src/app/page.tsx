@@ -63,7 +63,7 @@ export default async function Page() {
                 Artisan
               </p>
               <h3 className="text-white font-extrabold leading-none text-3xl sm:text-5xl md:text-6xl drop-shadow">
-                Robert <br /> Martinez
+                Torres <br /> Peter
               </h3>
             </div>
             <Link
