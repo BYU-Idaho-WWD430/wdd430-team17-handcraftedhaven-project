@@ -1,13 +1,11 @@
-//import { auth } from "../../../auth";
+import { auth, signOut } from "../../../auth";
 import NavLinks from "./nav-links";
 import Image from "next/image";
 import Link from "next/link";
-//import { signOut } from "../../../auth";
 import NavHamburger from "./nav-hamburger";
 
 export default async function NavBar() {
   const session = await auth();
-  const authenticated = !!session;
 
   return (
     <div className="bg-[#F4EDE4]">
@@ -33,7 +31,7 @@ export default async function NavBar() {
 
         <div className="hidden md:flex flex-wrap p-4 gap-3 justify-end items-center">
           <NavLinks />
-          {!authenticated ? (
+          {!session?.user ? (
             <>
               <Link
                 href="/login"
@@ -51,7 +49,7 @@ export default async function NavBar() {
           ) : (
             <div className="flex items-center gap-4">
               <span className="font-medium text-gray-700">
-                Welcome, {session.user.firstname}!
+                Welcome, {session.user?.firstname}!
               </span>
               <form
                 action={async () => {
@@ -69,7 +67,7 @@ export default async function NavBar() {
 
         <div className="md:hidden pr-3">
           <NavHamburger
-            authenticated={authenticated}
+            authenticated={!!session?.user}
             firstName={session?.user?.firstname ?? null}
           />
         </div>
