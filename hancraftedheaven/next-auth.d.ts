@@ -3,7 +3,7 @@ import { JWT } from "next-auth/jwt";
 
 declare module "next-auth" {
   /**
-   * Extiende la sesión para incluir las propiedades personalizadas.
+   * Extends the default session type to include custom user properties.
    */
   interface Session {
     user: {
@@ -14,7 +14,7 @@ declare module "next-auth" {
   }
 
   /**
-   * Extiende el usuario para incluir las propiedades personalizadas.
+   * Extends the User object returned by NextAuth to include custom fields.
    */
   interface User {
     id: string;
@@ -25,7 +25,7 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
   /**
-   * Extiende el token JWT para incluir las propiedades personalizadas.
+   * Extends the JWT payload to ensure custom properties persist across requests.
    */
   interface JWT {
     id: string;

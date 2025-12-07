@@ -5,7 +5,7 @@ import ProductCard from "@/app/ui/catalog/ProductCard";
 
 export default async function Page() {
   const featuredProducts = await fetchFeaturedProducts();
-  const pedroTorresId = "7baf7cfb-84b9-47ba-b554-a146daefec3e"; // ID de ejemplo para el artesano destacado
+  const pedroTorresId = "7baf7cfb-84b9-47ba-b554-a146daefec3e"; // Example ID for the featured artisan
 
   return (
     <main className="bg-gray-50">

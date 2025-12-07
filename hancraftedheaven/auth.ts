@@ -3,14 +3,14 @@ import Credentials from "next-auth/providers/credentials";
 import { authConfig } from "./auth.config";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
-import prisma from "./src/app/lib/prisma"; // Reutilizamos el cliente de Prisma
+import prisma from "./src/app/lib/prisma"; // Reuse Prisma client instance
 
 export const { auth, signIn, signOut, handlers } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
       async authorize(credentials) {
-        // Usamos el cliente de Prisma para obtener el usuario
+        // Validate the received credentials using Zod
         const parsedCredentials = z
           .object({ email: z.string().email(), password: z.string().min(8) })
           .safeParse(credentials);
@@ -20,10 +20,11 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
           const user = await prisma.user.findUnique({ where: { email } });
           if (!user) return null;
 
+          // Compare provided password with stored hashed password
           const passwordsMatch = await bcrypt.compare(password, user.password);
 
           if (passwordsMatch) {
-            // Devolvemos un objeto compatible con la sesión
+            // Fetch user from the database using Prisma
             return {
               id: user.user_id,
               email: user.email,
@@ -41,7 +42,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        // Al iniciar sesión, el objeto 'user' está disponible para poblar el token
+        // When a user logs in, merge user data into the JWT token
         token.id = user.id;
         token.firstname = user.firstname;
         token.user_type = user.user_type;
@@ -49,7 +50,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      // Hacemos que los datos del token estén disponibles en el objeto de sesión
+      // Expose token information inside the session object
       session.user.id = token.id as string;
       session.user.firstname = token.firstname as string;
       session.user.user_type = token.user_type as "user" | "seller";

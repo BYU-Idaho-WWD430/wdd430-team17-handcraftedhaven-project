@@ -14,6 +14,8 @@ if (!dbUrl) {
 // Neon can take 5-10 seconds to wake up a sleeping database.
 const sql = postgres(dbUrl, { ssl: 'require', connect_timeout: 20 });
 
+// Seeds the database with predefined users (both sellers and buyers),
+// hashing their passwords and ensuring no duplicates are inserted.
 async function seedUsers() {
   console.log('Sembrando usuarios...');
   const hashedPassword = await bcrypt.hash('password123', 10);
@@ -37,6 +39,8 @@ async function seedUsers() {
   console.log(`Se sembraron ${users.length} usuarios.`);
 }
 
+// Seeds the database with predefined seller profiles linked to existing users,
+// inserting them only if they don't already exist.
 async function seedSellerProfiles() {
   console.log('Sembrando perfiles de vendedor...');
   const profiles = [
@@ -54,6 +58,8 @@ async function seedSellerProfiles() {
   console.log(`Se sembraron ${profiles.length} perfiles de vendedor.`);
 }
 
+// Seeds the database with predefined products linked to sellers,
+// inserting them only if they don't already exist.
 async function seedProducts() {
   console.log('Sembrando productos...');
   const products = [
@@ -75,6 +81,8 @@ async function seedProducts() {
   console.log(`Se sembraron ${products.length} productos.`);
 }
 
+// Runs all seed functions in order, closes the database connection,
+// and handles any errors that occur during the seeding process.
 async function main() {
   await seedUsers();
   await seedSellerProfiles();
