@@ -1,4 +1,7 @@
-import Page from "./homepage/page";
+import Image from "next/image";
+import Link from "next/link";
+import { fetchFeaturedProducts } from "@/app/lib/actions";
+import ProductCard from "@/app/ui/catalog/ProductCard";
 
 export default async function Page() {
   const featuredProducts = await fetchFeaturedProducts();
