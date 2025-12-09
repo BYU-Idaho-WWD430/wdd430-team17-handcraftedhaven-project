@@ -7,9 +7,11 @@ interface Props {
 }
 
 export default function RatingStars({ rating, className = '' }: Props) {
+  // Total amount of stars displayed in the rating component
   const totalStars = 5;
 
   return (
+    // Wrapper that allows optional custom styling via className
     <div className={`flex items-center ${className}`}>
       {[...Array(totalStars)].map((_, index) => {
         const starNumber = index + 1;

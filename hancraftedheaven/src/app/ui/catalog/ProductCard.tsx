@@ -3,7 +3,7 @@ import Link from 'next/link';
 import RatingStars from './RatingStars';
 import { Prisma } from '@prisma/client';
 
-// Extendemos el tipo Product para incluir el vendedor, tal como viene de la consulta
+// Extends Product type to include seller information returned from the query
 type ProductWithSeller = Prisma.ProductGetPayload<{
   include: {
     seller: {
@@ -20,13 +20,14 @@ interface Props {
 }
 
 export default function ProductCard({ product }: Props) {
+  // Build seller’s full display name
   const sellerName = `${product.seller.firstname} ${product.seller.lastname}`;
 
-  // Aseguramos que el precio se muestre con dos decimales
+  // Ensure price is formatted with two decimal places
   const price = product.price.toFixed(2);
 
-  // Simulación de un rating aleatorio para fines de diseño
-  const randomRating = Math.floor(Math.random() * 3) + 3; // Rating entre 3 y 5
+  // Temporary random rating for design display (until real rating is implemented)
+  const randomRating = Math.floor(Math.random() * 3) + 3; // Between 3 and 5
 
   return (
     <div className="group flex h-[30rem] w-full max-w-[22rem] flex-col overflow-hidden rounded-2xl border-4 border-[#c49b63] bg-[#fdf8f3] shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">

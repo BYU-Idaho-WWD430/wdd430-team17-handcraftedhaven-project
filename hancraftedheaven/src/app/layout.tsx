@@ -6,6 +6,7 @@ import Footer from "./ui/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
+// Default metadata for the entire application
 export const metadata: Metadata = {
   title: "Handcrafted Haven",
   description: "Your curated marketplace for authentic, artisan-made creations.",

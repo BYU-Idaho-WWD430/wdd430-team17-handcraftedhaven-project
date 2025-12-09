@@ -2,25 +2,25 @@ import { PrismaClient } from "@prisma/client";
 import { Pool } from "@neondatabase/serverless";
 import { PrismaNeon } from "@prisma/adapter-neon";
 
-// Este bloque previene que se creen múltiples instancias del cliente de Prisma
-// en el entorno de desarrollo debido a la recarga en caliente (hot-reloading).
+// This block prevents multiple instances of the Prisma client
+// from being created in the development environment due to hot-reloading.
 
 declare global {
-  // Permite que 'prisma' exista en el objeto global de NodeJS
+// Allows 'prisma' to exist on the global NodeJS object
   var prisma: PrismaClient | undefined;
 }
 
 const createPrismaClient = () => {
-  // 1. Obtener la URL de la base de datos de las variables de entorno.
+  // 1. Retrieve the database URL from environment variables.
   const connectionString = process.env.POSTGRES_PRISMA_URL;
 
-  // 2. Si la URL no existe, lanzar un error claro en lugar de dejar que la app crashee.
+  // 2. If the URL doesn't exist, throw a clear error instead of letting the app crash.
   if (!connectionString) {
-    throw new Error("La variable de entorno POSTGRES_PRISMA_URL no está definida. Revisa tu archivo .env.local");
+    throw new Error("The environment variable POSTGRES_PRISMA_URL is not defined. Check your .env.local file.");
   }
-  // 3. Si la URL no es una cadena de texto, lanzar un error específico.
+  // 3. If the URL is not a string, throw a specific error.
   if (typeof connectionString !== "string") {
-    throw new Error(`La variable de entorno POSTGRES_PRISMA_URL debe ser una cadena de texto (string), pero se recibió un tipo ${typeof connectionString}. Revisa la sintaxis en tu archivo .env.local`);
+    throw new Error(`The environment variable POSTGRES_PRISMA_URL must be a string, but a value of type ${typeof connectionString} was received. Check the syntax in your .env.local file.`);
   }
 
   const neon = new Pool({ connectionString });
@@ -32,6 +32,8 @@ const prisma = globalThis.prisma ?? createPrismaClient();
 
 export default prisma;
 
+// In development, store the Prisma client in the global scope
+// to avoid creating multiple instances during hot-reloading.
 if (process.env.NODE_ENV !== "production") {
   globalThis.prisma = prisma;
 }

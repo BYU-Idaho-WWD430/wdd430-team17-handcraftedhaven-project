@@ -27,6 +27,8 @@ const registerSchema = z
     path: ["confirmPassword"],
   });
 
+// Validates registration data, checks for existing users, hashes the password,
+// creates a new user in the database, and returns a success or error response
 export async function register(prevState: any, formData: FormData) {
   const rawData = Object.fromEntries(formData.entries());
   const result = registerSchema.safeParse(rawData);
@@ -73,13 +75,13 @@ export async function authenticate(prevState: string | undefined, formData: Form
 
 /* -------------------- DATA FETCHING (READ) -------------------- */
 
-// Helper para mapear el producto de Prisma al tipo que esperan los componentes
+// Helper to map the Prisma product to the type expected by the components
 const mapProductToProductWithSeller = (
   p: any
 ): ProductWithSeller & { seller: { firstname: string; lastname: string } } => ({
-  ...p, // Mantiene todos los campos del producto (product_id, name, etc.)
-  seller: p.seller, // Mantiene el objeto seller anidado, que es lo que espera ProductCard
-  category: p.category ?? null, // Asegura que el valor sea string o null, nunca undefined
+  ...p, // Keeps all product fields (product_id, name, etc.)
+  seller: p.seller, // Keeps the seller object nested, which is what ProductCard expects
+  category: p.category ?? null, // Ensures the value is a string or null, never undefined
 });
 
 const sellerWithUser = Prisma.validator<Prisma.SellerProfileDefaultArgs>()({
@@ -88,23 +90,27 @@ const sellerWithUser = Prisma.validator<Prisma.SellerProfileDefaultArgs>()({
 
 type SellerWithUserPayload = Prisma.SellerProfileGetPayload<typeof sellerWithUser>;
 
- export async function fetchAllSellers(): Promise<SellerProfile[]> {
+// Retrieves all sellers with their associated user info, then maps each record
+// into a normalized SellerProfile object with safe defaults for missing fields.
+export async function fetchAllSellers(): Promise<SellerProfile[]> {
   const sellers = await prisma.sellerProfile.findMany({
     include: { user: { select: { firstname: true, lastname: true } } },
     orderBy: [{ user: { firstname: "asc" } }, { user: { lastname: "asc" } }],
   });
-  // Tipamos explícitamente el parámetro 's' para asegurar que TypeScript conozca su forma.
-  // Esto evita el error 'implicitly has an any type' si la inferencia falla.
+  // We explicitly type the parameter 's' to ensure that TypeScript knows its shape.
+  // This avoids the 'implicitly has an any type' error if the inference fails.
   return sellers.map((s: SellerWithUserPayload) => ({
     ...s,
-    firstname: s.user.firstname ?? '', // Proporciona un string vacío si es null
-    lastname: s.user.lastname ?? '',   // Proporciona un string vacío si es null
+    firstname: s.user.firstname ?? '', // Returns an empty string if null
+    lastname: s.user.lastname ?? '',   // Returns an empty string if null
     image_url: s.image_url ?? '/images/placeholder-avatar.png',
     phone: s.phone ?? '',
     description: s.description ?? '',
   }));
 } 
 
+// Retrieves a seller’s profile by ID, including their basic user info,
+// and returns a normalized profile object with safe defaults for missing fields.
 export async function fetchSellerById(seller_id: string): Promise<SellerProfile | null> {
   const profile = await prisma.sellerProfile.findUnique({
     where: { user_id: seller_id },
@@ -114,13 +120,15 @@ export async function fetchSellerById(seller_id: string): Promise<SellerProfile 
   return {
     ...profile,
     firstname: profile.user.firstname,
-    lastname: profile.user.lastname ?? '', // Añadimos ?? '' por consistencia
+    lastname: profile.user.lastname ?? '', // We added ?? '' for consistency
     image_url: profile.image_url ?? '/images/placeholder-avatar.png',
     phone: profile.phone ?? '',
     description: profile.description ?? '',
   };
 }
 
+// Fetches all products from the database, including seller and profile info,
+// and maps them into the ProductWithSeller structure.
 export async function fetchAllProducts(): Promise<ProductWithSeller[]> {
   const products = await prisma.product.findMany({
     include: { seller: { include: { profile: true } } },
@@ -129,6 +137,8 @@ export async function fetchAllProducts(): Promise<ProductWithSeller[]> {
   return products.map(mapProductToProductWithSeller);
 }
 
+// Retrieves a single product by its ID, including seller and profile details,
+// and returns it mapped into the ProductWithSeller structure (or null if not found).
 export async function fetchProductById(product_id: string): Promise<ProductWithSeller | null> {
   const product = await prisma.product.findUnique({
     where: { product_id },
@@ -138,6 +148,8 @@ export async function fetchProductById(product_id: string): Promise<ProductWithS
   return mapProductToProductWithSeller(product);
 }
 
+// Retrieves all products belonging to a specific seller, including seller and profile data,
+// then maps them into the ProductWithSeller format.
 export async function fetchProductsBySellerId(seller_id: string): Promise<ProductWithSeller[]> {
   const products = await prisma.product.findMany({
     where: { user_id: seller_id },
@@ -147,6 +159,8 @@ export async function fetchProductsBySellerId(seller_id: string): Promise<Produc
   return products.map(mapProductToProductWithSeller);
 }
 
+// Fetches the first 6 products (alphabetically) along with seller and profile info,
+// then maps them into a unified ProductWithSeller structure.
 export async function fetchFeaturedProducts(): Promise<ProductWithSeller[]> {
   const products = await prisma.product.findMany({
     take: 6,
@@ -156,6 +170,8 @@ export async function fetchFeaturedProducts(): Promise<ProductWithSeller[]> {
   return products.map(mapProductToProductWithSeller);
 }
 
+// Retrieves all stories posted by a specific seller, returning basic fields
+// and ordering them by newest first.
 export async function fetchStoryBySellerId(seller_id: string) {
   return await prisma.story.findMany({
     where: { user_id: seller_id },
@@ -164,6 +180,8 @@ export async function fetchStoryBySellerId(seller_id: string) {
   });
 }
 
+// Builds a Prisma-compatible where-clause based on selected filters
+// (category, seller, and price range) for product queries.
 function buildWhereClause(searchParams: { categories?: string; sellers?: string; price?: string; }) {
   const { categories, sellers, price } = searchParams;
   const priceRange =
@@ -179,11 +197,15 @@ function buildWhereClause(searchParams: { categories?: string; sellers?: string;
   };
 }
 
+// Returns the total number of products that match the given filter criteria,
+// using the same where-clause logic as the paginated product query.
 export async function fetchFilteredProductsCount(searchParams: { categories?: string; sellers?: string; price?: string; }): Promise<number> {
   const whereClause = buildWhereClause(searchParams);
   return await prisma.product.count({ where: whereClause });
 }
 
+// Fetches a paginated list of products filtered by category, seller, or price,
+// including seller and profile details, and maps results into a unified structure.
 export async function fetchFilteredProductsPaged(searchParams: { categories?: string; sellers?: string; price?: string; }, take: number): Promise<ProductWithSeller[]> {
   const whereClause = buildWhereClause(searchParams);
   const products = await prisma.product.findMany({
@@ -195,7 +217,9 @@ export async function fetchFilteredProductsPaged(searchParams: { categories?: st
   return products.map(mapProductToProductWithSeller);
 }
 
- export async function fetchAllCategories(): Promise<{ category_id: string; category_name: string }[]> {
+// Retrieves all unique seller categories from the database,
+// sorted alphabetically, and returns them in a simplified format.
+export async function fetchAllCategories(): Promise<{ category_id: string; category_name: string }[]> {
   const categories = await prisma.sellerProfile.findMany({
     select: { category: true },
     distinct: ["category"],
@@ -204,6 +228,8 @@ export async function fetchFilteredProductsPaged(searchParams: { categories?: st
   return categories.map((c) => ({ category_id: c.category, category_name: c.category }));
 }
  
+// Fetches all reviews for a specific product, including basic user info,
+// and returns them with safe defaults for nullable fields.
  export async function fetchReviewsByProducts(product_id: string): Promise<Review[]> {
   const reviewsFromDb = await prisma.review.findMany({
     where: { product_id },
@@ -219,6 +245,8 @@ export async function fetchFilteredProductsPaged(searchParams: { categories?: st
   }));
 }
 
+// Retrieves a product’s average rating and total number of reviews
+// by aggregating review data in the database.
 export async function fetchProductStats(product_id: string) {
   try {
     const stats = await prisma.review.aggregate({
@@ -238,11 +266,15 @@ export async function fetchProductStats(product_id: string) {
 
 /* -------------------- DATA MUTATIONS (CREATE, UPDATE, DELETE) -------------------- */
 
+// Zod schema that ensures a valid user_id (UUID) and requires
+// the story content to have at least 10 characters.
 const storySchema = z.object({
   user_id: z.string().uuid(),
   content: z.string().min(10, "Story must be at least 10 characters"),
 });
 
+// Validates story data with Zod, creates a new user story in the database,
+// refreshes the user's profile page, and returns a success or error response.
 export async function postNewStory(prevState: any, formData: FormData) {
   const rawData = Object.fromEntries(formData.entries());
   const result = storySchema.safeParse(rawData);
@@ -262,6 +294,8 @@ export async function postNewStory(prevState: any, formData: FormData) {
   }
 }
 
+// Zod schema validating that review submissions include valid UUIDs,
+// a rating between 1 and 5, and a review message of at least 10 characters.
 const reviewSchema = z.object({
   user_id: z.string().uuid(),
   product_id: z.string().uuid(),
@@ -269,6 +303,8 @@ const reviewSchema = z.object({
   review: z.string().min(10, "Review must be at least 10 characters"),
 });
 
+// Validates review data with Zod, creates a new product review in the database,
+// refreshes the product page, and returns a success or error response.
 export async function postNewReview(prevState: any, formData: FormData) {
   const rawData = Object.fromEntries(formData.entries());
   const result = reviewSchema.safeParse(rawData);
@@ -288,6 +324,8 @@ export async function postNewReview(prevState: any, formData: FormData) {
   }
 }
 
+// Updates both the basic user data and the seller profile fields in a single database transaction,
+// then refreshes the seller’s edit profile page to reflect the changes.
 export async function updateSellerBasics(formData: FormData): Promise<void> {
   const user_id = String(formData.get("user_id"));
   const firstname = String(formData.get("firstname") ?? "");
@@ -311,6 +349,8 @@ export async function updateSellerBasics(formData: FormData): Promise<void> {
   revalidatePath(`/profiles/${user_id}/edit`);
 }
 
+// Zod schema that ensures the product_id is a valid UUID and 
+// the description has between 10 and 500 characters.
 const descriptionSchema = z.object({
   product_id: z.uuid(),
   description: z
@@ -319,6 +359,8 @@ const descriptionSchema = z.object({
     .max(500),
 });
 
+// Validates the form data for updating only the product description,
+// updates the database if validation passes, and refreshes the product page.
 export async function updateProductDescription(prevState: any, formData: FormData) {
   const rawData = Object.fromEntries(formData.entries());
   const result = descriptionSchema.safeParse(rawData);
@@ -338,6 +380,8 @@ export async function updateProductDescription(prevState: any, formData: FormDat
   }
 }
 
+// Updates all editable fields of an existing product in the database
+// and then refreshes the product detail page to show the updated information.
 export async function updateProductFull(formData: FormData): Promise<void> {
   const product_id = String(formData.get("product_id"));
   const name = String(formData.get("name") ?? "");
@@ -353,6 +397,8 @@ export async function updateProductFull(formData: FormData): Promise<void> {
   revalidatePath(`/list/${product_id}`);
 }
 
+// Creates a new product in the database using the form data
+// and then refreshes the user’s edit page to show the updated product list.
 export async function createProduct(formData: FormData): Promise<void> {
   const user_id = String(formData.get("user_id"));
   const name = String(formData.get("name") ?? "");
@@ -368,9 +414,11 @@ export async function createProduct(formData: FormData): Promise<void> {
   revalidatePath(`/profiles/${user_id}/edit`);
 }
 
+// Deletes a product from the database using its product_id and the associated user_id,
+// then refreshes the user’s edit page to reflect the updated product list.
 export async function deleteProduct(formData: FormData) {
   const product_id = String(formData.get("product_id"));
-  const user_id = String(formData.get("user_id")); // Asumimos que el user_id viene del formulario
+  const user_id = String(formData.get("user_id")); // We assume that the user_id comes from the form
   try {
     await prisma.product.delete({ where: { product_id, user_id } });
     revalidatePath(`/profiles/${user_id}/edit`);

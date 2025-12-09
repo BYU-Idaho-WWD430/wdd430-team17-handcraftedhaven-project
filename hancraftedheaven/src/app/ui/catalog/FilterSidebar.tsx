@@ -13,6 +13,7 @@ export default function FilterSidebar({ categories, sellers }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  // Sort categories alphabetically
   const orderedCategories = useMemo(
     () =>
       [...categories].sort((a, b) =>
@@ -20,35 +21,43 @@ export default function FilterSidebar({ categories, sellers }: Props) {
       ),
     [categories]
   );
+  // Sort sellers alphabetically
   const orderedSellers = useMemo(
     () => [...sellers].sort((a, b) => a.name.localeCompare(b.name)),
     [sellers]
   );
 
+  // Accordion open/close states
   const [openCat, setOpenCat] = useState(false);
   const [openSel, setOpenSel] = useState(false);
   const [openPrice, setOpenPrice] = useState(false);
 
+  // Expand sections automatically based on active filters
   useEffect(() => {
     if (searchParams.get("categories")) setOpenCat(true);
     if (searchParams.get("sellers")) setOpenSel(true);
     if (searchParams.get("price")) setOpenPrice(true);
   }, [searchParams]);
 
+  // Handle selecting or removing a filter
   const handleFilterChange = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
+    // Toggle filter if clicking the same option again
     if (params.get(key) === value) params.delete(key);
     else params.set(key, value);
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
+  // Detect if any filter is active
   const hasAny =
     !!searchParams.get("categories") ||
     !!searchParams.get("sellers") ||
     !!searchParams.get("price");
 
+  // Shared styling for radio inputs
   const radioClass = "mr-3 accent-[#ffe0b2] scale-90 sm:scale-100";
 
+  // Simple reusable row component for the accordion headers
   const Row = ({
     label,
     open,
@@ -74,6 +83,7 @@ export default function FilterSidebar({ categories, sellers }: Props) {
     </button>
   );
 
+  // Wrapper for expandable panel content
   const Panel = ({
     id,
     open,
