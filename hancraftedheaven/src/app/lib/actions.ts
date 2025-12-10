@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-//import { signIn } from "../../../auth"; // Asegúrate que la ruta a auth.ts sea correcta
+import { signIn } from "../../../auth"; // Asegúrate que la ruta a auth.ts sea correcta
 import { AuthError } from "next-auth";
 import bcrypt from "bcryptjs";
 import prisma from "./prisma";
@@ -26,6 +26,15 @@ const registerSchema = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
+
+export type RegisterData = z.infer<typeof registerSchema>;
+
+export type RegisterResult = {
+  success: boolean;
+  errors?: z.ZodFormattedError<RegisterData>;
+  message?: string;
+  submittedData?: Record<string, string>;
+};
 
 // Validates registration data, checks for existing users, hashes the password,
 // creates a new user in the database, and returns a success or error response
@@ -58,7 +67,8 @@ export async function register(prevState: any, formData: FormData) {
   }
 }
 
-/* -------------------- LOGIN -------------------- 
+/* -------------------- LOGIN -------------------- */
+
 export async function authenticate(prevState: string | undefined, formData: FormData) {
   try {
     await signIn("credentials", formData);
@@ -71,7 +81,7 @@ export async function authenticate(prevState: string | undefined, formData: Form
     }
     throw error;
   }
-} */
+} 
 
 /* -------------------- DATA FETCHING (READ) -------------------- */
 
@@ -303,6 +313,15 @@ const reviewSchema = z.object({
   review: z.string().min(10, "Review must be at least 10 characters"),
 });
 
+type ReviewData = z.infer<typeof reviewSchema>;
+
+export type ReviewFormState = {
+  success: boolean;
+  message?: string;
+  errors?: z.ZodFormattedError<ReviewData>;
+  submittedData?: Record<string, string>;
+};
+
 // Validates review data with Zod, creates a new product review in the database,
 // refreshes the product page, and returns a success or error response.
 export async function postNewReview(prevState: any, formData: FormData) {
@@ -358,6 +377,12 @@ const descriptionSchema = z.object({
     .min(10, "Description must be at least 10 characters long.")
     .max(500),
 });
+
+export type DescriptionFormState = {
+  success: boolean;
+  message?: string;
+  errors?: z.ZodFormattedError<{ description: string; product_id: string }>;
+};
 
 // Validates the form data for updating only the product description,
 // updates the database if validation passes, and refreshes the product page.
