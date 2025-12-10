@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-//import { signIn } from "../../../auth"; // Asegúrate que la ruta a auth.ts sea correcta
+import { signIn } from "../../../auth"; // Asegúrate que la ruta a auth.ts sea correcta
 import { AuthError } from "next-auth";
 import bcrypt from "bcryptjs";
 import prisma from "./prisma";
@@ -26,6 +26,15 @@ const registerSchema = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
+
+export type RegisterData = z.infer<typeof registerSchema>;
+
+export type RegisterResult = {
+  success: boolean;
+  errors?: z.ZodFormattedError<RegisterData>;
+  message?: string;
+  submittedData?: Record<string, string>;
+};
 
 // Validates registration data, checks for existing users, hashes the password,
 // creates a new user in the database, and returns a success or error response
@@ -58,7 +67,8 @@ export async function register(prevState: any, formData: FormData) {
   }
 }
 
-/* -------------------- LOGIN -------------------- 
+/* -------------------- LOGIN -------------------- */
+
 export async function authenticate(prevState: string | undefined, formData: FormData) {
   try {
     await signIn("credentials", formData);
@@ -71,7 +81,7 @@ export async function authenticate(prevState: string | undefined, formData: Form
     }
     throw error;
   }
-} */
+} 
 
 /* -------------------- DATA FETCHING (READ) -------------------- */
 
