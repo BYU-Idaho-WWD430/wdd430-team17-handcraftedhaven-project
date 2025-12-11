@@ -1,4 +1,4 @@
-import { auth, signOut } from "../../../auth";
+import { auth, signOut } from "@/app/lib/auth";
 import NavLinks from "./nav-links";
 import Image from "next/image";
 import Link from "next/link";

@@ -3,7 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import { authConfig } from "./auth.config";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
-import prisma from "./src/app/lib/prisma"; // Reuse Prisma client instance
+import prisma from "./prisma"; // Reuse Prisma client instance
 
 export const { auth, signIn, signOut, handlers } = NextAuth({
   ...authConfig,

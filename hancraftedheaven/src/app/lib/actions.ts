@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { signIn } from "../../../auth";
+import { signIn } from "@/app/lib/auth";
 import { AuthError } from "next-auth";
 import bcrypt from "bcryptjs";
 import prisma from "./prisma";
