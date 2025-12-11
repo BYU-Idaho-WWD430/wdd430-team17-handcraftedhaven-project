@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { signIn } from "../../../auth"; // Asegúrate que la ruta a auth.ts sea correcta
+import { signIn } from "../../../auth";
 import { AuthError } from "next-auth";
 import bcrypt from "bcryptjs";
 import prisma from "./prisma";
