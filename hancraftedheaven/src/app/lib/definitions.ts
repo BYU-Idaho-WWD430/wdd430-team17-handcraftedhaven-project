@@ -55,3 +55,11 @@ export type Review = {
   rating: number;
   created_at: Date;
 };
+
+export type RegisterResult = {
+  success: boolean;
+  errors?: Record<string, string[]>;
+  message?: string;
+  // Update this line:
+  submittedData?: Record<string, string | File>; // or Record<string, FormDataEntryValue>
+};

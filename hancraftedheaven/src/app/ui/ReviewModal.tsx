@@ -21,7 +21,7 @@ export function ReviewModal({ user_id, product_id, onClose }: Props) {
   };
 
   const [state, formAction, isPending] = useActionState(
-    postNewReview,
+    postNewReview as any,
     initialState
   );
 

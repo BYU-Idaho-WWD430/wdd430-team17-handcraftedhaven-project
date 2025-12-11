@@ -21,7 +21,7 @@ export default function ReviewCard({
   return (
     <section className="w-full max-w-5xl mx-auto rounded-2xl border border-black/20 bg-[#F4EDE4] overflow-hidden">
       <div className="px-5 py-3 border-b border-black/20">
-        <AverageRating product_id={product_id} />
+        <AverageRating {...({ product_id } as any)} />
       </div>
 
       {hasReviews ? (
