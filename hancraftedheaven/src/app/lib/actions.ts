@@ -9,6 +9,8 @@ import { Prisma } from "@prisma/client";
 import { ProductWithSeller, SellerProfile, Review } from "@/app/lib/definitions";
 import { revalidatePath } from "next/cache";
 
+import { redirect } from "next/navigation";
+
 /* -------------------- REGISTRATION -------------------- */
 const registerSchema = z
   .object({
@@ -67,21 +69,36 @@ export async function register(prevState: any, formData: FormData) {
   }
 }
 
-/* -------------------- LOGIN -------------------- */
 
-export async function authenticate(prevState: string | undefined, formData: FormData) {
+/* -------------------- LOGIN -------------------- */
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData
+) {
   try {
-    await signIn("credentials", formData);
+const email = formData.get("email") as string;
+const password = formData.get("password") as string;
+const redirectTo = (formData.get("redirectTo") as string) || "/list";
+
+    await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    return redirect(redirectTo);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
-        case "CredentialsSignin": return "Invalid credentials.";
-        default: return "Something went wrong.";
+        case "CredentialsSignin":
+          return "Invalid credentials.";
+        default:
+          return "Something went wrong.";
       }
     }
     throw error;
   }
-} 
+}
 
 /* -------------------- DATA FETCHING (READ) -------------------- */
 
