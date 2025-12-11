@@ -6,14 +6,14 @@ import {
   updateProductDescription,
   type DescriptionFormState,
 } from "@/app/lib/actions";
-import { type ProductWithSeller } from "@/app/lib/definitions";
 
 type Props = {
-  product: ProductWithSeller;
+  productId: string;
+  description: string | null;
   isOwner: boolean;
 };
 
-export function EditableDescription({ product, isOwner }: Props) {
+export function EditableDescription({ productId, description, isOwner }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [formKey, setFormKey] = useState(Date.now());
 
@@ -33,7 +33,7 @@ export function EditableDescription({ product, isOwner }: Props) {
   if (!isOwner) {
     return (
       <p className="text-gray-700 mt-2">
-        {product.description || "This product has no description"}
+        {description || "This product has no description"}
       </p>
     );
   }
@@ -42,10 +42,10 @@ export function EditableDescription({ product, isOwner }: Props) {
     <div className="mt-4 w-[500px]">
       {isEditing ? (
         <form key={formKey} action={formAction} className="space-y-2">
-          <input type="hidden" name="product_id" value={product.product_id} />
+          <input type="hidden" name="product_id" value={productId} />
           <textarea
             name="description"
-            defaultValue={product.description || ""}
+            defaultValue={description || ""}
             className="w-full h-20 p-2 border border-gray-300 rounded"
             rows={4}
             required
@@ -76,13 +76,13 @@ export function EditableDescription({ product, isOwner }: Props) {
       ) : (
         <div className="flex flex-col items-start gap-4">
           <p className="text-gray-700 flex-grow">
-            {product.description || "No description."}
+            {description || "No description."}
           </p>
           <button
             onClick={() => setIsEditing(true)}
             className="bg-black text-white px-4 py-1 rounded hover:bg-gray-800 text-sm"
           >
-            {product.description ? "Edit" : "Add description"}
+            {description ? "Edit" : "Add description"}
           </button>
         </div>
       )}
