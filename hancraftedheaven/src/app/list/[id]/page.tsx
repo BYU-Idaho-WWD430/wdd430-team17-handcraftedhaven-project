@@ -64,7 +64,8 @@ export default async function ProductPage({
 
           <div className="mb-4">
             <EditableDescription
-              product={product}
+              productId={product.product_id}
+              description={product.description}
               isOwner={session?.user?.id === product.user_id}
             />
           </div>

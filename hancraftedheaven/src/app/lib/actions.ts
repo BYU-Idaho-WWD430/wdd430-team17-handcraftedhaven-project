@@ -452,3 +452,10 @@ export async function deleteProduct(formData: FormData) {
     throw new Error("Failed to delete product.");
   }
 }
+
+export type StoryFormState = {
+  success: boolean;
+  message?: string | null;
+  errors?: z.ZodFormattedError<z.infer<typeof storySchema>>;
+  submittedData?: Record<string, any>;
+};
