@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import Image from "next/image";
 import Link from "next/link";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
-import { auth } from "../../../../auth";
+import { auth } from "@/app/lib/auth";
 import { fetchProductById, fetchReviewsByProducts } from "@/app/lib/actions";
 import ReviewCard from "@/app/ui/Reviews";
 import { EditableDescription } from "@/app/ui/EditableDescription";
