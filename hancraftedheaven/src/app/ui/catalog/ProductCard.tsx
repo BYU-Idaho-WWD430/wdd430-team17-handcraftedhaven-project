@@ -32,7 +32,7 @@ export default function ProductCard({ product }: Props) {
   return (
     <div className="group flex h-[30rem] w-full max-w-[22rem] flex-col overflow-hidden rounded-2xl border-4 border-[#c49b63] bg-[#fdf8f3] shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
       <div className="relative h-1/2 w-full overflow-hidden">
-        <Link href={`/products/${product.product_id}`} className="block h-full w-full">
+        <Link href={`/list/${product.product_id}`} className="block h-full w-full">
             <Image
               src={product.image || '/images/placeholder.png'}
               alt={product.name}
@@ -63,7 +63,7 @@ export default function ProductCard({ product }: Props) {
 
         <div className="mt-auto flex items-end justify-between pt-5">
           <span className="text-3xl font-bold text-green-800">${price}</span>
-          <Link href={`/products/${product.product_id}`} className="rounded-lg bg-[#1f2937] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-amber-800 hover:shadow-lg">
+          <Link href={`/list/${product.product_id}`} className="rounded-lg bg-[#1f2937] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-amber-800 hover:shadow-lg">
             View Product
           </Link>
         </div>
@@ -71,4 +71,3 @@ export default function ProductCard({ product }: Props) {
     </div>
   );
 }
-

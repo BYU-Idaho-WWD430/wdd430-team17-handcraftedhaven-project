@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound } from 'next/navigation';
 import Image from "next/image";
 import Link from "next/link";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
