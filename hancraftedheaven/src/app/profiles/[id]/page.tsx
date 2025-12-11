@@ -11,7 +11,7 @@ import ProductCard from "@/app/ui/catalog/ProductCard";
 import { PhoneIcon, CalendarDaysIcon } from "@heroicons/react/16/solid";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import { auth } from "../../../../auth";
-import { StoryTrigger } from "@/app/profiles/[id]/StoryTrigger";
+import { StoryTrigger } from "@/app/ui/catalog/stories/StorieTrigger";
 
 /** Fuerza render dinámico para que auth() tenga cookies en Vercel */
 export const dynamic = "force-dynamic";
@@ -107,44 +107,6 @@ export default async function SellerProfilePage({
             height={168}
             className="h-36 w-36 sm:h-40 sm:w-40 rounded-full object-cover ring-4 ring-white shadow-md"
           />
-        </div>
-      </section>
-
-      <section className="pt-24 sm:pt-28">
-        <div className="max-w-7xl mx-auto px-4 relative">
-          {isOwner && (
-            <div className="hidden md:block absolute right-4 -top-12">
-              <Link
-                href={`/profiles/${profile.user_id}/edit`}
-                className={btnPrimary}
-              >
-                EDIT PROFILE
-              </Link>
-            </div>
-          )}
-          <h1
-            className="text-center text-3xl sm:text-4xl font-extrabold"
-            style={{ color: brand.text }}
-          >
-            {profile.firstname} {profile.lastname}
-          </h1>
-          <p
-            className="mt-1 text-center text-lg font-bold"
-            style={{ color: brand.brown }}
-          >
-            {profile.category}
-          </p>
-          {isOwner && (
-            <div className="mt-4 flex justify-center md:hidden">
-              <Link
-                href={`/profiles/${profile.user_id}/edit`}
-                className={btnPrimary}
-              >
-                EDIT PROFILE
-              </Link>
-            </div>
-          )}
-          <div className="mt-6 border-t border-black/10" />
         </div>
       </section>
 
