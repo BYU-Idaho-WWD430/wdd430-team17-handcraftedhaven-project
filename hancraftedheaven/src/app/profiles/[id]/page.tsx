@@ -1,7 +1,6 @@
 // app/profiles/[id]/page.tsx
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import {
   fetchProductsBySellerId,
   fetchSellerById,
