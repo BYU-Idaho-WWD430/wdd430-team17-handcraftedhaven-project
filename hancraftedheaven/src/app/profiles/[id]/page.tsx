@@ -71,9 +71,8 @@ export default async function SellerProfilePage({
   const session = await auth();
   const { id } = await params;
 
-  const seller = await fetchSellerById(id);
-  if (!seller.length) return notFound();
-  const profile = seller[0];
+  const profile = await fetchSellerById(id);
+  if (!profile) return notFound();
 
   const products = await fetchProductsBySellerId(id);
   const stories = await fetchStoryBySellerId(id);
@@ -196,7 +195,7 @@ export default async function SellerProfilePage({
                       style={{ color: "#4b5563" }}
                     >
                       <CalendarDaysIcon className="w-5" />
-                      {new Date(story.created_at).toLocaleDateString()}
+                      {story.created_at ? new Date(story.created_at).toLocaleDateString() : ""}
                     </p>
                   </article>
                 ))
