@@ -9,7 +9,7 @@ import { Prisma } from "@prisma/client";
 import { ProductWithSeller, SellerProfile, Review } from "@/app/lib/definitions";
 import { revalidatePath } from "next/cache";
 
-/* -------------------- REGISTRATION -------------------- */
+/* -------------------- REGISTRATION important -------------------- */
 const registerSchema = z
   .object({
     firstname: z.string().min(1, "First name is required."),
