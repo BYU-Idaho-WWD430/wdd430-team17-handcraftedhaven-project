@@ -20,17 +20,13 @@ export default async function ProductPage({
 }) {
   const { id } = await params;     // 👈 esperar antes de usar
 
-  const rawProduct = await fetchProductById(id);
-  if (!rawProduct?.length) return notFound();
-  const product = rawProduct[0];
+  const product = await fetchProductById(id);
+  if (!product) return notFound();
 
   const session = await auth();
   const reviews = await fetchReviewsByProducts(id);
 
-  const price =
-    typeof product.price === "number"
-      ? product.price.toFixed(2)
-      : Number(product.price).toFixed(2);
+  const price = Number(product.price).toFixed(2);
 
   return (
     <main className="max-w-7xl mx-auto px-4 py-10">
@@ -83,7 +79,7 @@ export default async function ProductPage({
               href={`/profiles/${product.user_id}`}
               className="text-blue-600 hover:underline"
             >
-              By: {product.seller_firstname} {product.seller_lastname}
+              By: {(product as any).user?.firstname} {(product as any).user?.lastname}
             </Link>
           </p>
 

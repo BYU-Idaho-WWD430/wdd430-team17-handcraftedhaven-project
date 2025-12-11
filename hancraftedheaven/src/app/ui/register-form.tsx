@@ -12,7 +12,7 @@ export default function RegisterForm() {
   const [result, formAction, isPending] = useActionState<
     RegisterResult | undefined,
     FormData
-  >(register, undefined);
+  >(register as any, undefined);
 
   useEffect(() => {
     if (result?.success) {
