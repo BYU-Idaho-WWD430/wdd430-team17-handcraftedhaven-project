@@ -12,7 +12,7 @@
  - This repository is our Final Project named "Handcrafted Haven" about a website to sell handcrafts or artesany.
  
 This is the link to see the project on line or deployment: 
-- https://wdd430-team17-handcraftedhaven-proj-beta.vercel.app/
+- https://wdd430-team17-handcraftedhaven-project-pa9c1rwge.vercel.app/
 
 ### Getting Started
 
