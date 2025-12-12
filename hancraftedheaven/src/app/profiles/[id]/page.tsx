@@ -10,7 +10,7 @@ import ProductCard from "@/app/ui/catalog/ProductCard";
 import { PhoneIcon, CalendarDaysIcon } from "@heroicons/react/16/solid";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import { auth } from "@/app/lib/auth";
-import { StoryTrigger } from "@/app/ui/catalog/stories/StorieTrigger";
+import { StoryTrigger } from "@/app/ui/catalog/StoryTrigger";
 
 /** Fuerza render dinámico para que auth() tenga cookies en Vercel */
 export const dynamic = "force-dynamic";
